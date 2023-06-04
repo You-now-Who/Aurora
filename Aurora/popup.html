@@ -47,6 +47,11 @@
         #currTopics {
           max-height: 200px;
         }
+        input[type="range"]::-webkit-slider-runnable-track {
+  background-color: #bcc0c4; /* Replace with your desired color */
+}
+
+
     </style>
   </head>
   <body>
@@ -58,6 +63,28 @@
         <input type="text" class="form-control" id="topic" placeholder="Enter your topic" />
         <button class="btn btn-primary" id="addTopic">Add topics</button>
       </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <label for="customRange1" class="form-label">Intensity</label>
+            <input type="range" class="form-range" id="customRange1">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col mb-2">
+            <span id="rangeValue">50</span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <button class="btn btn-primary" id="saveIntensity">Save Intensity</button>
+          </div>
+        </div>
+      </div>
+      
+
+
       <div class="container mt-5">
         <h4 class="text-center my-3">These are the current topics:</h4>
   
@@ -65,6 +92,19 @@
         </ul>
       </div>
     </div>
+
+
+    <div class="container mb-4">
+        <div class="row justify-content-center">
+          <div class="col-6">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" role="switch" id="censorSwitch">
+              <label class="form-check-label" for="flexSwitchCheckChecked">Censor Words</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      
 
     
 

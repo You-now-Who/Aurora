@@ -10,30 +10,99 @@ async function getTopics() {
     });
   }
 
-// chrome.storage.local.set({ topics: ["test"] }, function () {
-//     console.log("Value is set to " + ["test"]);
-//     });
+async function getCensorState () {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get(['censorState'], function(result) {
+            if (result.censorState != undefined)
+            {
+
+            
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result.censorState);
+            }
+        }
+        else {
+            chrome.storage.local.set({ censorState: false }, function () {
+                console.log("Value default set to " + false);
+              }
+              );
+              resolve(false);
+            }
+        });
+    });
+}
+
 
 async function addTopic() {
     const topic = document.getElementById("topic").value;
     const topicsList = await getTopics();
 
     // Check if topic exists. If not, add the topic to the list of topics and set it in local storage
-    if (!topicsList.includes(topic)) {
+    if (!topicsList.includes(topic) && topic !== "") {
         topicsList.push(topic);
+        // Remove the lists from currTopics
+        const list = document.getElementById("currTopics");
+        list.innerHTML = "";
         chrome.storage.local.set({ topics: topicsList }, function () {
-            console.log("Value is set to " + topicsList);
+            console.log("Value is set to " + topicsList);  
         });
         main()
     }
 
-    
-
     console.log(topicsList);
 }
 
+async function getIntensity() {
+    return new Promise((resolve, reject) => {
+        chrome.storage.local.get(['intensity'], function(result) {
+            if (result.intensity != undefined){
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                resolve(result.intensity);
+            }}
+            else {
+                // Set the default intensity to 10
+                chrome.storage.local.set({ intensity: 10 }, function () {
+                    console.log("Value is set to " + 10);
+                }
+                );
+                resolve(10);
+
+            }
+        });
+    });
+}
+
+
 async function main() {
   let topics = await getTopics();
+
+  let censorState = await getCensorState();
+  let censorButton = document.getElementById("censorSwitch");
+
+  console.log("censorState", censorState)
+  if (censorState) {
+    console.log("censorState is true");
+    censorButton.checked = true;
+  }
+    else {
+        censorButton.checked = false;
+    }
+
+
+  const rangeInput = document.getElementById("customRange1");
+  const rangeValue = document.getElementById("rangeValue");
+
+  rangeInput.value = await getIntensity();
+  rangeValue.textContent = rangeInput.value;
+
+rangeInput.addEventListener("input", function() {
+  rangeValue.textContent = rangeInput.value;
+});
+
 
   console.log("main topics", topics);
 
@@ -56,11 +125,11 @@ async function main() {
   const deleteButton = document.createElement("button");
   deleteButton.classList.add("btn", "btn-danger", "btn-sm", "ms-2");
   deleteButton.innerHTML = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-      <path d="M5.5 5.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-4a.5.5 0 0 1-.5-.5v-1zm1-1v-1a1.5 1.5 0 0 1 3 0v1h-3zm-2 1a.5.5 0 0 0-.5.5v9a.5.5 0 0 0 .5.5h11a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-11z"/>
-      <path d="M2.5 5.5h11v9h-11v-9zm1 1v7h9v-7h-9z"/>
-      <title>Delete</title>
-    </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+</svg>
+
   `;
 
   // Add a click event listener to the delete button
@@ -86,9 +155,40 @@ async function main() {
 }
 }
 
-main();
-
 document.getElementById("addTopic").addEventListener("click", function () {
     addTopic();
     }
 );
+
+document.getElementById("saveIntensity").addEventListener("click", function () {
+    const intensity = document.getElementById("customRange1").value;
+    chrome.storage.local.set({ "intensity": intensity }, function () {
+        console.log("Value is set to " + intensity);
+        });
+        }
+    );
+
+// When the censor switch is clicked, change the censor state in local storage
+document.getElementById("censorSwitch").addEventListener("click", function () {
+    chrome.storage.local.get(['censorState'], function(result) {
+        if (result.censorState != undefined){
+            if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+            } else {
+                chrome.storage.local.set({ censorState: !result.censorState }, function () {
+                    console.log("Value is set to " + !result.censorState);
+                    });
+            }}
+        else {
+            chrome.storage.local.set({ censorState: true }, function () {
+                console.log("Value is set by default to " + true);
+                }
+                );
+        }
+    });
+    }
+);
+
+
+main();
+

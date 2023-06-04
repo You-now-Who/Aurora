@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "Aurora",
+  "version": "1.0",
+  "description": "Add the reading time to Chrome Extension documentation articles",
+    "permissions": [
+        "activeTab",
+        "scripting"
+    ],
+  "content_scripts": [
+    {
+      "js": ["scripts/content.js"],
+      "matches": [
+        "https://developer.chrome.com/docs/extensions/*",
+        "https://developer.chrome.com/docs/webstore/*"
+      ]
+    }
+  ]
+}

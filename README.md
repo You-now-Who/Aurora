@@ -1,6 +1,6 @@
 # Aurora: Your Virtual Guardian Against Online Triggers
 
-![Aurora Logo]([aurora-logo.png](https://i.imgur.com/eNcgIeb.png))
+![Aurora Logo](https://i.imgur.com/eNcgIeb.png)
 
 Aurora is a powerful Chrome extension designed to enhance your online well-being by guarding against trigger words and topics that may cause distress or discomfort. With its intelligent scouting capabilities and customizable search intensity, Aurora provides a seamless browsing experience, allowing you to stay engaged while avoiding sensitive content.
 

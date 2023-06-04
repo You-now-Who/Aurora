@@ -32,7 +32,7 @@ To contribute to the development of Aurora, follow these steps:
 
 ## Support and Feedback
 
-We value your experience and feedback! If you encounter any issues, have suggestions for improvements, or want to share your thoughts, please reach out to us at [support@auroraextension.com](mailto:support@auroraextension.com). Our dedicated support team is here to assist you.
+We value your experience and feedback! If you encounter any issues, have suggestions for improvements, or want to share your thoughts, please reach out to us with the github issues. Our dedicated support team (aka only me) is here to assist you.
 
 ## License
 

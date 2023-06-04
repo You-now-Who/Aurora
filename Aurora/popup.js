@@ -1,6 +1,15 @@
 async function getTopics() {
     return new Promise((resolve, reject) => {
       chrome.storage.local.get(['topics'], function(result) {
+        
+        if (result.topics === undefined) {
+            chrome.storage.local.set({ topics: [] }, function () {
+                console.log("Value is set to " + []);
+                }
+                );
+                resolve([]);
+        }
+        
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
         } else {
@@ -40,6 +49,7 @@ async function addTopic() {
     const topicsList = await getTopics();
 
     // Check if topic exists. If not, add the topic to the list of topics and set it in local storage
+    
     if (!topicsList.includes(topic) && topic !== "") {
         topicsList.push(topic);
         // Remove the lists from currTopics
